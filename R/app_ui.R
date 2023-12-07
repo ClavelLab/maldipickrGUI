@@ -12,10 +12,27 @@ app_ui <- function(request) {
     bs4Dash::dashboardPage(
       title = golem::get_golem_name(),
       header = bs4Dash::dashboardHeader(
-        title = golem::get_golem_name()
+        golem::get_golem_name()
       ),
       sidebar = bs4Dash::dashboardSidebar(
-          title =  golem::get_golem_name()
+        bs4Dash::sidebarUserPanel(
+          image = "www/maldipickrGUI.png",
+          name = golem::get_golem_name()
+        ),
+        bs4Dash::sidebarMenu(
+          id = "sidebarmenu",
+          bs4Dash::sidebarHeader("Header 1"),
+          bs4Dash::menuItem(
+            "Item 1",
+            tabName = "item1",
+            icon = icon("sliders")
+          ),
+          bs4Dash::menuItem(
+            "Item 2",
+            tabName = "item2",
+            icon = icon("id-card")
+          )
+        )
       ),
       footer = bs4Dash::dashboardFooter(
         left = desc::desc_get("Title") |> stringr::str_remove("\\n") |> stringr::str_squish(),
