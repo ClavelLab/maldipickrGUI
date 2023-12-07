@@ -9,8 +9,19 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
-    fluidPage(
-      h1("maldipickrGUI")
+    bs4Dash::dashboardPage(
+      title = golem::get_golem_name(),
+      header = bs4Dash::dashboardHeader(
+        title = golem::get_golem_name()
+      ),
+      sidebar = bs4Dash::dashboardSidebar(
+          title =  golem::get_golem_name()
+      ),
+      footer = bs4Dash::dashboardFooter(
+        left = desc::desc_get("Title") |> stringr::str_remove("\\n") |> stringr::str_squish(),
+        right = paste0("v", golem::get_golem_version())
+      ),
+      body = bs4Dash::dashboardBody()
     )
   )
 }
