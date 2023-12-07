@@ -1,0 +1,38 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# maldipickrGUI
+
+<!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+The goal of `{maldipickrGUI}` is to provide an interactive interface to
+run reproducible workflow to dereplicate and cherry-pick mass
+spectrometry spectra using the
+[`{maldipickr}`](https://cran.r-project.org/package=maldipickr), in
+order to reduce the redundancy of bacterial isolates.
+
+The interface is a [`{shiny}`](https://cran.r-project.org/package=shiny)
+application, built using the robust
+[`{golem}`](https://cran.r-project.org/package=golem) framework.
+Reproducible workflows are created using
+[`{targets}`](https://docs.ropensci.org/targets/).
+
+## Installation
+
+You can install the development version of `{maldipickrGUI}` using the
+following command in R:
+
+``` r
+remotes::install_github("ClavelLab/maldipickrGUI")
+```
+
+## Code of Conduct
+
+Please note that the `{maldipickrGUI}` project is released with a
+[Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
