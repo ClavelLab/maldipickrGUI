@@ -18,9 +18,8 @@ mod_load_spectra_ui <- function(id){
         "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")"
       ),
       tags$p(
-        shiny::fileInput(ns("spectra_dirs"),
-                         "Choose directory",
-                         multiple = TRUE)
+        shinyFiles::shinyDirButton(ns("spectra_dirs"),
+                         "Choose directory", "Input directory")
       )
     )
   )
@@ -33,6 +32,12 @@ mod_load_spectra_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     golem::print_dev("running load spectra")
+    volumes <- c(Home = fs::path_home(), Here = fs::path_wd())
+
+    shinyFiles::shinyDirChoose(input, ns("spectra_dirs"),
+                               roots = volumes, session = session,
+                               allowDirCreate = FALSE)
+
     observe({
       cat("\ninput$spectra_dirs:\n\n")
       print(input$spectra_dirs)
