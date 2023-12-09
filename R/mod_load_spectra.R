@@ -10,9 +10,19 @@
 mod_load_spectra_ui <- function(id){
   ns <- NS(id)
   tagList(
-    shiny::fileInput(ns("spectra_dirs"),
-                     "Choose one or more MALDI-TOF Biotyper spectra directory",
-                     multiple = TRUE)
+    bs4Dash::box(
+      title = "Import spectra", id = ns("box_import"),
+      collapsible = FALSE, closable = FALSE,
+      tags$p(
+        "Choose at least one directory which contains spectra from a MALDI-TOF",
+        "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")"
+      ),
+      tags$p(
+        shiny::fileInput(ns("spectra_dirs"),
+                         "Choose directory",
+                         multiple = TRUE)
+      )
+    )
   )
 }
 
