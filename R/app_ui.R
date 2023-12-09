@@ -38,7 +38,9 @@ app_ui <- function(request) {
         left = desc::desc_get("Title") |> stringr::str_remove("\\n") |> stringr::str_squish(),
         right = paste0("v", golem::get_golem_version())
       ),
-      body = bs4Dash::dashboardBody()
+      body = bs4Dash::dashboardBody(
+        mod_load_spectra_ui("load_spectra_1")
+      )
     )
   )
 }
