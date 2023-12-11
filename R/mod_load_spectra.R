@@ -10,6 +10,7 @@
 mod_load_spectra_ui <- function(id){
   ns <- NS(id)
   tagList(
+    fluidRow(
     bs4Dash::box(
       title = "Import spectra", id = ns("box_import"),
       collapsible = FALSE, closable = FALSE,
@@ -20,8 +21,19 @@ mod_load_spectra_ui <- function(id){
       tags$p(
         shinyFiles::shinyDirButton(ns("spectra_dirs"),
                          "Choose directory", "Input directory"),
-      verbatimTextOutput(ns("directorypath"), placeholder = T)
+      actionButton(ns("submitbutton"), "Add folder", class = "btn btn-primary"),
+      verbatimTextOutput(ns("directorypath"), placeholder = FALSE),
+      verbatimTextOutput(ns("selected"))
+
       )
+    ),
+    bs4Dash::box(
+      title = "confirm selection", id = ns("box_confirm"),
+      collapsible = FALSE, closable = FALSE,
+      tags$p(
+        checkboxGroupInput(ns('chosenfolders'),'Chosen folders...')
+      )
+    )
     )
   )
 }
@@ -37,12 +49,30 @@ mod_load_spectra_server <- function(id){
     shinyFiles::shinyDirChoose(input, "spectra_dirs",
                                roots = volumes, session = session,
                                allowDirCreate = FALSE)
+    datasetInput <- reactive({
+      inputfolders <- c(input$chosenfolders,
+                        shinyFiles::parseDirPath(volumes, input$spectra_dirs))
+      updateCheckboxGroupInput(session, 'chosenfolders',
+                               choices = inputfolders,
+                               selected = inputfolders)
+      print(list('Input folders' = inputfolders))
+    })
 
     output$directorypath <- renderPrint({
       if (is.integer(input$spectra_dirs)) {
-        cat("No directory has been selected (shinyDirChoose)")
+        if (input$spectra_dirs > 0) {
+          cat("No directory selected")
+        }
       } else {
         shinyFiles::parseDirPath(volumes, input$spectra_dirs)
+      }
+    })
+
+    output$selected <- renderPrint({
+      if (input$submitbutton>0) {
+        isolate(datasetInput())
+      } else {
+        return("Server is ready for calculation.")
       }
     })
   })
