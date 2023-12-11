@@ -11,29 +11,22 @@ mod_load_spectra_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-    bs4Dash::box(
-      title = "Import spectra", id = ns("box_import"),
-      collapsible = FALSE, closable = FALSE,
-      tags$p(
-        "Choose at least one directory which contains spectra from a MALDI-TOF",
-        "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")"
-      ),
-      tags$p(
-        shinyFiles::shinyDirButton(ns("spectra_dirs"),
-                         "Choose directory", "Input directory"),
-      actionButton(ns("submitbutton"), "Add folder", class = "btn btn-primary"),
-      verbatimTextOutput(ns("directorypath"), placeholder = FALSE),
-      verbatimTextOutput(ns("selected"))
-
+      bs4Dash::box(
+        title = "Import spectra", id = ns("box_import"),
+        collapsible = FALSE, closable = FALSE,
+        tags$p(
+          "Choose at least one directory which contains spectra from a MALDI-TOF",
+          "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")"
+        ),
+        tags$p(
+          shinyFiles::shinyDirButton(
+            ns("spectra_dirs"),
+            "Choose directory", "Input directory")
+        ),
+        tags$p(
+          checkboxGroupInput(ns('chosenfolders'),'Directories to be included:')
+        )
       )
-    ),
-    bs4Dash::box(
-      title = "confirm selection", id = ns("box_confirm"),
-      collapsible = FALSE, closable = FALSE,
-      tags$p(
-        checkboxGroupInput(ns('chosenfolders'),'Chosen folders...')
-      )
-    )
     )
   )
 }
@@ -53,7 +46,7 @@ mod_load_spectra_server <- function(id){
       c(
         input$chosenfolders,
         shinyFiles::parseDirPath(volumes, input$spectra_dirs)
-      )
+      ) %>% base::unique()
     })
 
     observe({
@@ -61,23 +54,11 @@ mod_load_spectra_server <- function(id){
                                choices = inputfolders(),
                                selected = inputfolders())
     }) %>%
-      bindEvent(input$submitbutton)
+      bindEvent(input$spectra_dirs)
 
-    output$directorypath <- renderPrint({
-      if (is.integer(input$spectra_dirs)) {
-        if (input$spectra_dirs > 0) {
-          cat("No directory selected")
-        }
-      } else {
-        shinyFiles::parseDirPath(volumes, input$spectra_dirs)
-      }
-    })
-
-    output$selected <- renderPrint({
-      if (input$submitbutton>0) {
-        isolate(inputfolders())
-      } else {
-        return("Server is ready for calculation.")
+     output$selected <- renderPrint({
+      if (not_null(input$chosenfolders)) {
+        input$chosenfolders
       }
     })
   })
