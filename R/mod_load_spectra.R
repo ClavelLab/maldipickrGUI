@@ -26,7 +26,7 @@ mod_load_spectra_ui <- function(id){
             "Choose directory", "Input directory")
         ),
         tags$p(
-          checkboxGroupInput(ns('chosenfolders'),'Selected directories')
+          checkboxGroupInput(ns('chosen_dirs'),'Selected directories')
         )
       )
     )
@@ -44,23 +44,23 @@ mod_load_spectra_server <- function(id){
     shinyFiles::shinyDirChoose(input, "spectra_dirs",
                                roots = volumes, session = session,
                                allowDirCreate = FALSE)
-    inputfolders <- reactive({
+    getChosenDirs <- reactive({
       c(
-        input$chosenfolders,
+        input$chosen_dirs,
         shinyFiles::parseDirPath(volumes, input$spectra_dirs)
       ) %>% base::unique()
     })
 
     observe({
-      updateCheckboxGroupInput(session, 'chosenfolders',
-                               choices = inputfolders(),
-                               selected = inputfolders())
+      updateCheckboxGroupInput(session, 'chosen_dirs',
+                               choices = getChosenDirs(),
+                               selected = getChosenDirs())
     }) %>%
       bindEvent(input$spectra_dirs)
 
      output$selected <- renderPrint({
-      if (not_null(input$chosenfolders)) {
-        input$chosenfolders
+      if (not_null(input$chosen_dirs)) {
+        input$chosen_dirs
       }
     })
   })
