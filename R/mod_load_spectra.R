@@ -34,7 +34,7 @@ mod_load_spectra_server <- function(id){
     golem::print_dev("running load spectra")
     volumes <- c(Home = fs::path_home(), Here = fs::path_wd())
 
-    shinyFiles::shinyDirChoose(input, ns("spectra_dirs"),
+    shinyFiles::shinyDirChoose(input, "spectra_dirs",
                                roots = volumes, session = session,
                                allowDirCreate = FALSE)
 
