@@ -49,14 +49,19 @@ mod_load_spectra_server <- function(id){
     shinyFiles::shinyDirChoose(input, "spectra_dirs",
                                roots = volumes, session = session,
                                allowDirCreate = FALSE)
-    datasetInput <- reactive({
-      inputfolders <- c(input$chosenfolders,
-                        shinyFiles::parseDirPath(volumes, input$spectra_dirs))
-      updateCheckboxGroupInput(session, 'chosenfolders',
-                               choices = inputfolders,
-                               selected = inputfolders)
-      print(list('Input folders' = inputfolders))
+    inputfolders <- reactive({
+      c(
+        input$chosenfolders,
+        shinyFiles::parseDirPath(volumes, input$spectra_dirs)
+      )
     })
+
+    observe({
+      updateCheckboxGroupInput(session, 'chosenfolders',
+                               choices = inputfolders(),
+                               selected = inputfolders())
+    }) %>%
+      bindEvent(input$submitbutton)
 
     output$directorypath <- renderPrint({
       if (is.integer(input$spectra_dirs)) {
@@ -70,7 +75,7 @@ mod_load_spectra_server <- function(id){
 
     output$selected <- renderPrint({
       if (input$submitbutton>0) {
-        isolate(datasetInput())
+        isolate(inputfolders())
       } else {
         return("Server is ready for calculation.")
       }
