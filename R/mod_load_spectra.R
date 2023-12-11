@@ -16,7 +16,9 @@ mod_load_spectra_ui <- function(id){
         collapsible = FALSE, closable = FALSE,
         tags$p(
           "Choose at least one directory which contains spectra from a MALDI-TOF",
-          "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")"
+          "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")",
+          "using the button below. Selected directories will be listed and only",
+          "ticked directories will be included in the analysis."
         ),
         tags$p(
           shinyFiles::shinyDirButton(
@@ -24,7 +26,7 @@ mod_load_spectra_ui <- function(id){
             "Choose directory", "Input directory")
         ),
         tags$p(
-          checkboxGroupInput(ns('chosenfolders'),'Directories to be included:')
+          checkboxGroupInput(ns('chosenfolders'),'Selected directories')
         )
       )
     )
