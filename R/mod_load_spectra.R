@@ -19,7 +19,8 @@ mod_load_spectra_ui <- function(id){
       ),
       tags$p(
         shinyFiles::shinyDirButton(ns("spectra_dirs"),
-                         "Choose directory", "Input directory")
+                         "Choose directory", "Input directory"),
+      verbatimTextOutput(ns("directorypath"), placeholder = T)
       )
     )
   )
@@ -31,16 +32,18 @@ mod_load_spectra_ui <- function(id){
 mod_load_spectra_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    golem::print_dev("running load spectra")
     volumes <- c(Home = fs::path_home(), Here = fs::path_wd())
 
     shinyFiles::shinyDirChoose(input, "spectra_dirs",
                                roots = volumes, session = session,
                                allowDirCreate = FALSE)
 
-    observe({
-      cat("\ninput$spectra_dirs:\n\n")
-      print(input$spectra_dirs)
+    output$directorypath <- renderPrint({
+      if (is.integer(input$spectra_dirs)) {
+        cat("No directory has been selected (shinyDirChoose)")
+      } else {
+        shinyFiles::parseDirPath(volumes, input$spectra_dirs)
+      }
     })
   })
 }
