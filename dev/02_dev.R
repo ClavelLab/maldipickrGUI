@@ -19,6 +19,7 @@
 attachment::att_amend_desc()
 
 usethis::use_package("bs4Dash",min_version = "2.3.0")
+usethis::use_pipe() # %>%
 
 ## Add modules ----
 ## Create a module infrastructure in R/
