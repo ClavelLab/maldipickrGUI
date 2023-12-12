@@ -13,7 +13,7 @@ mod_select_dirs_ui <- function(id){
     fluidRow(
       bs4Dash::box(
         title = "Import spectra", id = ns("box_import"),
-        collapsible = FALSE, closable = FALSE,
+        collapsible = FALSE, closable = FALSE, width = 12,
         tags$p(
           "Choose at least one directory which contains spectra from a MALDI-TOF",
           "Biotyper spectra directory (i.e., a ",tags$em("target", .noWS = "after"), ")",
@@ -58,16 +58,18 @@ mod_select_dirs_server <- function(id){
     }) %>%
       bindEvent(input$spectra_dirs)
 
-     output$selected <- renderPrint({
-      if (not_null(input$chosen_dirs)) {
-        input$chosen_dirs
-      }
-    })
+    # based on:
+    # https://engineering-shiny.org/structuring-project.html?q=modules#a.-returning-values-from-the-module
+     return(
+       reactive({
+         input$chosen_dirs
+        })
+     )
   })
 }
-    
+
 ## To be copied in the UI
-# 
-    
+#
+
 ## To be copied in the server
-# 
+#
