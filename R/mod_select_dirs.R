@@ -10,9 +10,8 @@
 mod_select_dirs_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidRow(
-      bs4Dash::box(
-        title = "Import spectra", id = ns("box_import"),
+    bs4Dash::box(
+        title = "Select data directories", id = ns("box_select"),
         collapsible = FALSE, closable = FALSE, width = 12,
         tags$p(
           "Choose at least one directory which contains spectra from a MALDI-TOF",
@@ -28,7 +27,6 @@ mod_select_dirs_ui <- function(id){
         tags$p(
           checkboxGroupInput(ns('chosen_dirs'),'Selected directories')
         )
-      )
     )
   )
 }
