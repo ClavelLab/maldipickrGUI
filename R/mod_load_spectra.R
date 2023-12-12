@@ -10,7 +10,14 @@
 mod_load_spectra_ui <- function(id){
   ns <- NS(id)
   tagList(
-    tableOutput(ns("lengths_spectra"))
+    bs4Dash::box(
+      title = "Number of spectra", id = ns("box_select"),
+      solidHeader = FALSE, status = "info",
+      collapsible = FALSE, closable = FALSE, width = 12,
+      tags$div(
+        tableOutput(ns("lengths_spectra")),
+        class="d-flex justify-content-center")
+    )
   )
 }
 
@@ -25,7 +32,10 @@ mod_load_spectra_server <- function(id, selected_dirs){
         selected_dirs() %>%
           estimate_number_spectra() %>%
           tibble::as_tibble(rownames = "chosen_dirs") %>%
-          dplyr::rename("n_spectra" = "value")
+          dplyr::rename("n_spectra" = "value") %>%
+          dplyr::mutate(
+            chosen_dirs = fs::path_file(chosen_dirs)
+          )
       }
     })
   })
