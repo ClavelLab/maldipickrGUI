@@ -10,7 +10,7 @@
 mod_load_spectra_ui <- function(id){
   ns <- NS(id)
   tagList(
-    verbatimTextOutput(ns("lengths_spectra"))
+    tableOutput(ns("lengths_spectra"))
   )
 }
 
@@ -20,9 +20,12 @@ mod_load_spectra_ui <- function(id){
 mod_load_spectra_server <- function(id, selected_dirs){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    output$lengths_spectra <- renderPrint({
+    output$lengths_spectra <- renderTable({
       if(not_null(selected_dirs())){
-        selected_dirs()
+        selected_dirs() %>%
+          estimate_number_spectra() %>%
+          tibble::as_tibble(rownames = "chosen_dirs") %>%
+          dplyr::rename("n_spectra" = "value")
       }
     })
   })
