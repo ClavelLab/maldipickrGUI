@@ -39,6 +39,7 @@ app_ui <- function(request) {
         right = paste0("v", golem::get_golem_version())
       ),
       body = bs4Dash::dashboardBody(
+        mod_select_dirs_ui("select_dirs_1"),
         mod_load_spectra_ui("load_spectra_1")
       )
     )

@@ -6,5 +6,6 @@
 #' @noRd
 app_server <- function(input, output, session) {
   # Your application server logic
+  mod_select_dirs_server("select_dirs_1")
   mod_load_spectra_server("load_spectra_1")
 }
