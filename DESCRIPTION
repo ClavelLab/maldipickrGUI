@@ -14,12 +14,14 @@ Imports:
     bs4Dash (>= 2.3.0),
     config (>= 0.3.2),
     desc,
+    dplyr,
     fs,
     golem (>= 0.4.1),
     magrittr,
     shiny (>= 1.8.0),
     shinyFiles,
-    stringr
+    stringr,
+    tibble
 Suggests: 
     spelling,
     testthat (>= 3.0.0)
