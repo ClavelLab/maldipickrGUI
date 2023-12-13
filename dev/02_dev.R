@@ -28,6 +28,7 @@ golem::add_module(name = "load_spectra", with_test = TRUE) # Name of the module
 
 # Add functions
 golem::add_fct("spectra", with_test = TRUE)
+golem::add_fct("write_pipeline")
 
 
 ## Add helper functions ----

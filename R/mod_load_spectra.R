@@ -17,7 +17,12 @@ mod_load_spectra_ui <- function(id){
       tags$div(
         tableOutput(ns("lengths_spectra")),
         class="d-flex justify-content-center")
-    )
+    ),
+    bs4Dash::actionButton(inputId = ns("import_spectra"),
+                          label = "Import spectra",
+                          status = "success") %>%
+      tags$div(align = "right") %>%
+      col_12()
   )
 }
 
@@ -38,6 +43,11 @@ mod_load_spectra_server <- function(id, selected_dirs){
           )
       }
     })
+
+    observe({
+      write_pipeline(selected_dirs())
+      targets::tar_make()
+    }) %>% bindEvent(input$import_spectra)
   })
 }
 
