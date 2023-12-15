@@ -22,7 +22,16 @@ mod_load_spectra_ui <- function(id){
                           label = "Import spectra",
                           status = "success") %>%
       tags$div(align = "right") %>%
-      col_12()
+      col_12(),
+    tags$br(),
+    bs4Dash::box(
+      title = "Quality control", id = ns("box_qc"),
+      solidHeader = FALSE, status = "info",
+      collapsible = TRUE, closable = FALSE, width = 12,
+      tags$div(
+        tableOutput(ns("stats_spectra")),
+        class="d-flex justify-content-center")
+    ),
   )
 }
 
@@ -41,6 +50,12 @@ mod_load_spectra_server <- function(id, selected_dirs){
           dplyr::mutate(
             chosen_dirs = fs::path_file(chosen_dirs)
           )
+      }
+    })
+
+    output$stats_spectra <- renderTable({
+      if(not_null(selected_dirs()) & targets::tar_exist_objects("all_stats")){
+        targets::tar_read("all_stats")
       }
     })
 
