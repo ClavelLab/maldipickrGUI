@@ -20,7 +20,7 @@ write_pipeline <- function(
       garbage_collection = TRUE,
       iteration = "list"
     )
-
+    tar_source(files = "R/fct_spectra.R")
     # Workflow
     list(
       tarchetypes::tar_files(
@@ -33,8 +33,24 @@ write_pipeline <- function(
         pattern = map(plates)
       ),
       tar_target(
-        spectra_lengths,
-        base::lengths(spectra_raw)
+        checks,
+        check_spectra(spectra_raw, tolerance = 1),
+        pattern = map(spectra_raw)
+      ),
+      tar_target(
+        valid_spectra,
+        remove_spectra(spectra_raw, checks),
+        pattern = map(spectra_raw, checks)
+      ),
+      tar_target(
+        spectra_stats,
+        gather_spectra_stats(checks, plates),
+        pattern = map(checks, plates),
+        iteration = "vector"
+      ),
+      tar_target(
+        all_stats,
+        dplyr::bind_rows(spectra_stats)
       )
     )
 
