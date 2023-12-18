@@ -47,22 +47,20 @@ mod_select_dirs_server <- function(id){
       c(
         input$chosen_dirs,
         shinyFiles::parseDirPath(volumes, input$spectra_dirs)
-      ) %>% base::unique()
-    })
-
-    getEstimateSpectra <- reactive({
-      getChosenDirs() %>%
-        glue::glue(
-          "{path} ({n})",
-          path = .,
-          n = estimate_number_spectra(.)
-        )
+      ) %>% base::unique() %>%
+        setNames(.,
+                 glue::glue("{path} ({n})",
+                            path = .,
+                            n = estimate_number_spectra(.))
+                 )
     })
 
     observe({
-      updateCheckboxGroupInput(session, 'chosen_dirs',
-                               choices = getEstimateSpectra(),
-                               selected = getChosenDirs())
+      updateCheckboxGroupInput(
+        session, 'chosen_dirs',
+        choices = getChosenDirs(),
+        selected = getChosenDirs()
+      )
     }) %>%
       bindEvent(input$spectra_dirs)
 
