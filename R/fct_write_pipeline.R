@@ -1,13 +1,14 @@
 #' Write the _targets.R script
 #'
+#' @param name Project name
 #' @param raw_spectra List of directories with MALDI Biotyper raw spectra data
 #' @return None. Used for side-effects.
 #'
 #' @noRd
 #'
-#' @author William Landau
 #' @source Adapted from <https://github.com/wlandau/targets-shiny>
 write_pipeline <- function(
+    name,
     raw_spectra
 ) {
   targets::tar_helper("_targets.R", {
