@@ -25,7 +25,8 @@ mod_select_dirs_ui <- function(id){
             "Choose directory", "Input directory")
         ),
         tags$p(
-          checkboxGroupInput(ns('chosen_dirs'),'Selected directories')
+          checkboxGroupInput(ns('chosen_dirs'),'Selected directories'),
+          helpText("Estimated number of spectra is indicated between brackets.")
         )
     )
   )
@@ -49,9 +50,18 @@ mod_select_dirs_server <- function(id){
       ) %>% base::unique()
     })
 
+    getEstimateSpectra <- reactive({
+      getChosenDirs() %>%
+        glue::glue(
+          "{path} ({n})",
+          path = .,
+          n = estimate_number_spectra(.)
+        )
+    })
+
     observe({
       updateCheckboxGroupInput(session, 'chosen_dirs',
-                               choices = getChosenDirs(),
+                               choices = getEstimateSpectra(),
                                selected = getChosenDirs())
     }) %>%
       bindEvent(input$spectra_dirs)

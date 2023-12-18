@@ -18,10 +18,6 @@ estimate_number_spectra <- function(directory){
                  glob = "*1SLin*fid$",
                  recurse = TRUE) %>% base::length()
     },  FUN.VALUE = integer(1L))
-
-  if(any( n_spectra  == 0)){
-    warning("Directory with no spectra")
-  }
   return(n_spectra)
 }
 
